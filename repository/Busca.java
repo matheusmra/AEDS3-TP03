@@ -55,7 +55,8 @@ public class Busca {
     }
 
     public List<String> removerStopWords(final String text) {
-        List<String> s = Arrays.asList(removerAcentos(text).toLowerCase().split(" "));
+        String normalizado = removerAcentos(text).toLowerCase().replaceAll("[^a-z0-9 ]", " ");
+        List<String> s = Arrays.asList(normalizado.trim().split("\\s+"));
 
         return s.stream().filter(v -> !Objects.isNull(v) && !STOP_WORDS.contains(v)).toList();
     }
