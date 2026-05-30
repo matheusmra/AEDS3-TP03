@@ -61,6 +61,11 @@ public class InscricoesView {
         return console.nextLine().trim();
     }
 
+    public String lerBuscaPalavrasChave() {
+        System.out.print("\nDigite as palavras-chave para a busca: ");
+        return console.nextLine().trim();
+    }
+
     public boolean confirmarCancelamento() {
         System.out.print("Cancelar minha inscrição neste curso? Confirmar (S/N): ");
         return console.nextLine().trim().equalsIgnoreCase("S");

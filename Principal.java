@@ -337,6 +337,50 @@ public class Principal {
         menuDetalheCursoParaInscricao(usuario, curso);
     }
 
+    private static void menuBuscarCursoPorPalavrasChave(Usuario usuario) throws Exception {
+        String query = INSCRICOES_VIEW.lerBuscaPalavrasChave();
+        if (query.isEmpty()) {
+            INSCRICOES_VIEW.mostrarMensagem("Busca vazia.");
+            return;
+        }
+
+        List<Curso> cursosEncontrados = CURSO_CONTROLLER.buscarPorPalavrasChave(query);
+        if (cursosEncontrados == null || cursosEncontrados.isEmpty()) {
+            INSCRICOES_VIEW.mostrarMensagem("Nenhum curso encontrado com essas palavras.");
+            return;
+        }
+
+        INSCRICOES_VIEW.resetarPaginacao();
+        boolean emLista = true;
+        while (emLista) {
+            String opcao = INSCRICOES_VIEW.lerOpcaoMenuListaTodosCursos(cursosEncontrados);
+
+            switch (opcao) {
+                case "A":
+                    INSCRICOES_VIEW.irAnterior();
+                    break;
+                case "B":
+                    INSCRICOES_VIEW.irProxima();
+                    break;
+                case "R":
+                    emLista = false;
+                    INSCRICOES_VIEW.resetarPaginacao();
+                    break;
+                default:
+                    // Verifica se é um número válido (0-9) e se o curso existe
+                    if (INSCRICOES_VIEW.opcaoValida(opcao)) {
+                        Curso curso = INSCRICOES_VIEW.obterCursoSelecionado(opcao);
+                        if (curso != null) {
+                            menuDetalheCursoParaInscricao(usuario, curso);
+                        }
+                    } else {
+                        INSCRICOES_VIEW.mostrarMensagem("Opção inválida.");
+                    }
+                    break;
+            }
+        }
+    }
+
     private static void menuDetalheCursoParaInscricao(Usuario usuario, Curso curso) throws Exception {
         boolean emDetalhe = true;
         Usuario autor = USUARIO_CONTROLLER.buscarPorId(curso.usuarioId);
@@ -473,7 +517,7 @@ public class Principal {
                     menuBuscarCursoPorCodigo(usuario);
                     break;
                 case "B":
-                    INSCRICOES_VIEW.mostrarMensagem("Busca de curso por palavras-chave disponível no TP3.");
+                    menuBuscarCursoPorPalavrasChave(usuario);
                     break;
                 case "C":
                     menuListaTodosCursos(usuario);
