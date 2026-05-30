@@ -536,6 +536,13 @@ public class ListaInvertida {
 
   }
 
+  public void close() throws Exception {
+    if (arqDicionario != null)
+      arqDicionario.close();
+    if (arqBlocos != null)
+      arqBlocos.close();
+  }
+
   public void print() throws Exception {
 
     System.out.println("\nLISTAS INVERTIDAS:");
