@@ -70,6 +70,24 @@ public class CursoController {
         }
     }
 
+    // BUSCA POR PALAVRAS-CHAVE (TFxIDF)
+    public List<Curso> buscarPorPalavrasChave(String query) {
+        try {
+            List<Integer> ids = busca.pesquisar(query);
+            List<Curso> cursos = new java.util.ArrayList<>();
+            for (Integer id : ids) {
+                Curso c = repository.read(id);
+                if (c != null) {
+                    cursos.add(c);
+                }
+            }
+            return cursos;
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar cursos por palavras-chave: " + e.getMessage());
+            return new java.util.ArrayList<>();
+        }
+    }
+
     // ✅ LISTAR POR USUÁRIO (COM ÁRVORE B+)
     public List<Curso> listarPorUsuario(int usuarioId) {
         try {
