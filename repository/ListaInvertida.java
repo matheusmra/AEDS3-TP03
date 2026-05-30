@@ -402,6 +402,44 @@ public class ListaInvertida {
     return null;
   }
 
+  // Retorna o número de entidades associadas a um termo
+  public int tamanhoDaLista(String c) throws Exception {
+    String termo = "";
+    long endereco = -1;
+
+    // localiza o termo no dicionário
+    boolean existe = false;
+    arqDicionario.seek(4);
+    while (arqDicionario.getFilePointer() != arqDicionario.length()) {
+      termo = arqDicionario.readUTF();
+      endereco = arqDicionario.readLong();
+      if (termo.compareTo(c) == 0) {
+        existe = true;
+        break;
+      }
+    }
+    if (!existe)
+      return 0;
+
+    int total = 0;
+    Bloco b = new Bloco(quantidadeDadosPorBloco);
+    byte[] bd;
+    while (endereco != -1) {
+      // Carrega o bloco
+      arqBlocos.seek(endereco);
+      bd = new byte[b.size()];
+      arqBlocos.read(bd);
+      b.fromByteArray(bd);
+
+      // soma a quantidade presente neste bloco
+      total += b.quantidade;
+
+      // Avança para o próximo bloco
+      endereco = b.next();
+    }
+
+    return total;
+  }
   // Atualiza o dado de um termo, se ele existir
   public boolean update(String c, ElementoLista e) throws Exception {
 
