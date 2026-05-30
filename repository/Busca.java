@@ -84,7 +84,7 @@ public class Busca {
         s.forEach(v -> m.put(v, m.getOrDefault(v, 0) + 1));
         m.forEach((k, v) -> {
             try {
-                this.iv.create(k, new ElementoLista(id, v / s.size()));
+                this.iv.create(k, new ElementoLista(id, ((float) v) / s.size()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -107,7 +107,7 @@ public class Busca {
                 r = Arrays.asList(this.iv.read(v));
 
                 if (r.size() > 0) {
-                    float idf = (float) Math.log(total / r.size());
+                    float idf = (float) (Math.log10((double) total / (double) r.size()) + 1.0);
                     r.forEach(e -> {
                         float newWeight = m.getOrDefault(e.getId(), 0f) + (e.getFrequencia() * idf);
                         m.put(e.getId(), newWeight);
